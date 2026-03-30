@@ -21,15 +21,27 @@
     justify-content: center;
     align-items: center;
     background: black;
+    overflow: hidden;
+  }
+
+  .video-rotate-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vh;
+    height: 100vw;
+    transform: translate(-50%, -50%) rotate(90deg);
+    transform-origin: center center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: black;
   }
   
   video {
-    transform: rotate(90deg);
-    transform-origin: center center;
-    width: 100vh;
-    height: 100vw;
-    max-width: 100vh;
-    max-height: 100vw;
+    width: 100vw;
+    height: 100vh;
     object-fit: cover;
     display: block;
     background: black;
@@ -51,10 +63,12 @@
 </head>
 <body>
 <div id="wrapper">
-  <video id="player" controls loop playsinline webkit-playsinline muted>
-    <source src="11.mp4" type="video/mp4">
-    Your browser does not support HTML5 video.
-  </video>
+  <div class="video-rotate-container">
+    <video id="player" controls loop playsinline webkit-playsinline muted>
+      <source src="11.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+    </video>
+  </div>
   <div id="debug">ready</div>
 </div>
 
