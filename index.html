@@ -1,81 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Video Display</title>
-<style>
-  html, body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    background: black;
-    overflow: hidden;
-  }
-  
-  #wrapper {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: black;
-    overflow: hidden;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>McKenzie's Kitchen</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
+    }
 
-  
-  video {
-    width: 100vw;
-    height: 100vh;
-    object-fit: contain;
-    display: block;
-    background: black;
-  }
-  
-  #debug {
-    position: absolute;
-    bottom: 8px;
-    left: 8px;
-    background: rgba(0,0,0,0.7);
-    color: #fff;
-    font-family: monospace;
-    font-size: 12px;
-    padding: 8px;
-    border-radius: 6px;
-    z-index: 999;
-  }
-</style>
+    .wrapper {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 100vh;
+      height: 100vw;
+      transform: translate(-50%, -50%) rotate(90deg);
+      background: #000;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  </style>
 </head>
 <body>
-<div id="wrapper">
-  <video id="player" controls loop playsinline webkit-playsinline muted>
-    <source src="11.mp4" type="video/mp4">
-    Your browser does not support HTML5 video.
-  </video>
-  <div id="debug">ready</div>
-</div>
+  <div class="wrapper">
+    <video id="player" loop playsinline webkit-playsinline muted preload="auto">
+      <source src="11.mov" type="video/mp4">
+    </video>
+  </div>
 
-<script>
-  const v = document.getElementById('player');
-  const d = document.getElementById('debug');
-  
-  function updateDebug() {
-    d.textContent = `video: ${v.videoWidth}x${v.videoHeight} ready=${v.readyState} playing=${!v.paused}`;
-  }
-  
-  v.addEventListener('loadedmetadata', updateDebug);
-  v.addEventListener('play', updateDebug);
-  v.addEventListener('pause', updateDebug);
-  v.addEventListener('error', () => {
-    d.textContent = `ERROR: ${v.error ? v.error.code : 'unknown'}`;
-  });
-  
-  // Auto-attempt play on load
-  v.addEventListener('canplay', () => {
-    v.play().catch(() => {});
-  });
-</script>
+  <script>
+    const v = document.getElementById('player');
+
+    function tryPlay() {
+      v.play().catch(() => {
+        document.addEventListener('click', () => v.play(), { once: true });
+        document.addEventListener('touchstart', () => v.play(), { once: true });
+      });
+    }
+
+    v.addEventListener('loadeddata', tryPlay);
+    v.addEventListener('canplaythrough', tryPlay);
+    setTimeout(tryPlay, 2000);
+  </script>
 </body>
 </html>
